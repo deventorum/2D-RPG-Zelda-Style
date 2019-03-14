@@ -1,16 +1,33 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     public float speed;
     Animator anim;
-    // Start is called before the first frame update
+    public Image[] Hearts;
+    public int maxHealth;
+    int currentHealth;
+
     void Start()
     {
         anim = GetComponent<Animator>();
         anim.SetInteger("dir", 0);
+        currentHealth = maxHealth;
+
+        GetHealth();
+    }
+
+    void GetHealth()
+    {
+        for (int i = 0; i < currentHealth; i++)
+        {
+            Hearts[i].gameObject.SetActive(true);
+            Debug.Log(Hearts[i]);
+        }
     }
 
     // Update is called once per frame
