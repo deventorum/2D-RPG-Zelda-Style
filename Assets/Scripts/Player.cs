@@ -12,12 +12,15 @@ public class Player : MonoBehaviour
     public int maxHealth;
     int currentHealth;
     public GameObject sword;
+    public float thrustPower;
+    public bool canMove;
 
     void Start()
     {
         anim = GetComponent<Animator>();
         currentHealth = maxHealth;
         GetHealth();
+        canMove = true;
     }
 
     private void GetHealth()
@@ -41,36 +44,53 @@ public class Player : MonoBehaviour
     }
     private void Attack()
     {
+        canMove = false;
         GameObject newSword = Instantiate(sword, transform.position, sword.transform.rotation);
+        #region //SwordRotation
         int swordDir = anim.GetInteger("dir");
         switch (swordDir)
         {
             case 1:
                 newSword.transform.Rotate(0, 0, 180);
+                newSword.GetComponent<Rigidbody2D>().AddForce(Vector2.down * thrustPower);
                 break;
             case 2:
                 newSword.transform.Rotate(0, 0, 0);
+                newSword.GetComponent<Rigidbody2D>().AddForce(Vector2.up * thrustPower);
                 break;
             case 3:
                 newSword.transform.Rotate(0, 0, -90);
+                newSword.GetComponent<Rigidbody2D>().AddForce(Vector2.right * thrustPower);
                 break;
             case 4:
                 newSword.transform.Rotate(0, 0, 90);
+                newSword.GetComponent<Rigidbody2D>().AddForce(Vector2.left * thrustPower);
                 break;
             default:
                 break;
         }
+        #endregion
     }
-    
+
     private void Movement()
     {
+        if (!canMove)
+            return;
         transform.Translate(Input.GetAxis("Horizontal") * speed * Time.deltaTime, Input.GetAxis("Vertical") * speed * Time.deltaTime, 0);
         RunPlayerAnimation();
     }
 
     private void RunPlayerAnimation()
     {
-        anim.speed = 1;
+        if (canMove)
+        {
+            anim.speed = 1;
+        }
+        else
+        {
+            anim.speed = 0;
+        }
+        #region  //AnimationDirection
         if (Input.GetAxis("Horizontal") > 0)
         {
             anim.SetInteger("dir", 3);
@@ -91,6 +111,8 @@ public class Player : MonoBehaviour
         {
             anim.speed = 0;
         }
+        #endregion
+
     }
 
 }
