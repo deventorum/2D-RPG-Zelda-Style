@@ -107,8 +107,9 @@ MonoBehaviour:
   - {fileID: 0}
   maxHealth: 10
   sword: {fileID: 4638390748267534504, guid: 52c8e1a47bdd14b9587f7566127ce0c8, type: 3}
-  thrustPower: 50
+  thrustPower: 200
   canMove: 0
+  canAttack: 0
 --- !u!95 &3519653742253249041
 Animator:
   serializedVersion: 3

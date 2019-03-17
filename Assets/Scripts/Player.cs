@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     public GameObject sword;
     public float thrustPower;
     public bool canMove;
+    public bool canAttack;
 
     void Start()
     {
@@ -21,6 +22,7 @@ public class Player : MonoBehaviour
         currentHealth = maxHealth;
         GetHealth();
         canMove = true;
+        canAttack = true;
     }
 
     private void GetHealth()
@@ -38,14 +40,17 @@ public class Player : MonoBehaviour
         // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Space) && canAttack) 
             Attack();
         Movement();
     }
     private void Attack()
     {
         canMove = false;
+        canAttack = false;
         GameObject newSword = Instantiate(sword, transform.position, sword.transform.rotation);
+        anim.speed = 1;
+        anim.SetBool("atk-anim", true);
         #region //SwordRotation
         int swordDir = anim.GetInteger("dir");
         switch (swordDir)
@@ -82,34 +87,30 @@ public class Player : MonoBehaviour
 
     private void RunPlayerAnimation()
     {
+        anim.speed = 1;
+        #region  //AnimationDirection
         if (canMove)
         {
-            anim.speed = 1;
-        }
-        else
-        {
-            anim.speed = 0;
-        }
-        #region  //AnimationDirection
-        if (Input.GetAxis("Horizontal") > 0)
-        {
-            anim.SetInteger("dir", 3);
-        }
-        else if (Input.GetAxis("Horizontal") < 0)
-        {
-            anim.SetInteger("dir", 4);
-        }
-        else if (Input.GetAxis("Vertical") < 0)
-        {
-            anim.SetInteger("dir", 1);
-        }
-        else if (Input.GetAxis("Vertical") > 0)
-        {
-            anim.SetInteger("dir", 2);
-        }
-        else
-        {
-            anim.speed = 0;
+            if (Input.GetAxis("Horizontal") > 0)
+            {
+                anim.SetInteger("dir", 3);
+            }
+            else if (Input.GetAxis("Horizontal") < 0)
+            {
+                anim.SetInteger("dir", 4);
+            }
+            else if (Input.GetAxis("Vertical") < 0)
+            {
+                anim.SetInteger("dir", 1);
+            }
+            else if (Input.GetAxis("Vertical") > 0)
+            {
+                anim.SetInteger("dir", 2);
+            }
+            else
+            {
+                anim.speed = 0;
+            }
         }
         #endregion
 
